@@ -1,4 +1,4 @@
-package domain;
+package com.hamza.digitalbank.domain;
 
 import java.util.UUID;
 

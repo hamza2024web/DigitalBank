@@ -1,4 +1,4 @@
-package domain;
+package com.hamza.digitalbank.domain;
 
 import java.math.BigDecimal;
 import java.time.Instant;

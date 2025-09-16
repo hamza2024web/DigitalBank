@@ -1,4 +1,4 @@
-package domain;
+package com.hamza.digitalbank.domain;
 
 public enum TransactionType {
     DEPOSIT,
