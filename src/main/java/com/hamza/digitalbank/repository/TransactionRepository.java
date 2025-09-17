@@ -1,4 +1,4 @@
-package com.hamza.digitalbank.domain.repository;
+package com.hamza.digitalbank.repository;
 
 import com.hamza.digitalbank.domain.Transaction;
 
