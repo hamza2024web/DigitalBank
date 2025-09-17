@@ -97,7 +97,13 @@ public class UserService {
         System.out.println("Adresse mis à jour avec succès !");
     }
 
-    public void UpdatePassword(String ancienPassword,String newPassword,User loggedInUser){
-
+    public void UpdatePassword(String oldPassword,String newPassword,User loggedInUser){
+        if(oldPassword.equals(loggedInUser.getPassword()) && newPassword.length() >= 6){
+            loggedInUser.setPassword(newPassword);
+            userRepository.save(loggedInUser);
+            System.out.println("Password mis à jour avec succès !");
+        } else {
+            System.out.println("veuillez saiser un mot de passe correct (ancien mot de passe valide et nouveau mot de passe >= 6");
+        }
     }
 }

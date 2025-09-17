@@ -75,10 +75,10 @@ public class Main {
                     break;
                 case "2":
                     System.out.println("Veuillez saiser l'ancien mot de pass");
-                    String ancienPassword = scanner.nextLine();
+                    String oldPassword = scanner.nextLine();
                     System.out.println("veuillez saiser le nouveau mot de pass");
                     String newPassword = scanner.nextLine();
-                    userService.UpdatePassword(ancienPassword,newPassword,loggedInUser);
+                    userService.UpdatePassword(oldPassword,newPassword,loggedInUser);
                     return;
                 case "3":
                 case "4":
