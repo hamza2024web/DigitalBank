@@ -1,6 +1,7 @@
 package com.hamza.digitalbank;
 
 import com.hamza.digitalbank.repository.*;
+import com.hamza.digitalbank.service.UserService;
 
 import java.util.Scanner;
 
@@ -9,6 +10,9 @@ public class Main {
         UserRepository userRepository = new InMemoryUserRepository();
         AccountRepository accountRepository = new InMemoryAccountRepository();
         TransactionRepository transactionRepository = new InMemoryTransactionRepository();
+
+        UserService userService = new UserService(userRepository,accountRepository);
+
 
         Scanner scanner = new Scanner(System.in);
 
@@ -27,7 +31,7 @@ public class Main {
 
             switch (choice){
                 case "1" :
-                    System.out.println("Fonctionnalité d'inscription à venir...");
+                    userService.registerNewUser(scanner);
                     break;
                 case "2" :
                     System.out.println("Fonctionnalité de connexion à venir...");
