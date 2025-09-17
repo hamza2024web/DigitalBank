@@ -35,7 +35,9 @@ public class User {
     public String getPassword(){
         return password;
     }
-
+    public void setFullName(String fullname){
+        this.fullname = fullname;
+    }
     public void setEmail(String email){
         this.email = email;
     }

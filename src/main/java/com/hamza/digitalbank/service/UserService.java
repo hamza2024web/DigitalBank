@@ -72,4 +72,12 @@ public class UserService {
         System.out.println("Erreur : Email ou mot de passe incorrect.");
         return Optional.empty();
     }
+
+    public void updateName(User loggedInUser,String newName){
+        loggedInUser.setFullName(newName);
+
+        userRepository.save(loggedInUser);
+
+        System.out.println("Nom mis à jour avec succès !");
+    }
 }

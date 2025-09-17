@@ -15,7 +15,6 @@ public class Main {
 
         UserService userService = new UserService(userRepository,accountRepository);
 
-
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("=============================================");
@@ -40,7 +39,7 @@ public class Main {
 
                     if(loggedInUserOptional.isPresent()){
                         User loggedInUser = loggedInUserOptional.get();
-                        showUserMenu(loggedInUser,scanner);
+                        showUserMenu(loggedInUser,scanner,userService);
                     }
                     break;
                 case "3":
@@ -54,22 +53,26 @@ public class Main {
         }
     }
 
-    private static void showUserMenu(User loggedInUser, Scanner scanner) {
+    private static void showUserMenu(User loggedInUser, Scanner scanner,UserService userService) {
         while (true) {
             System.out.println("\n--- Menu Utilisateur ---");
             System.out.println("Connecté en tant que : " + loggedInUser.getFullName());
-            System.out.println("1. Consulter mon solde");
-            System.out.println("2. Effectuer un dépôt");
-            System.out.println("3. Effectuer un retrait");
-            System.out.println("4. Effectuer un virement");
-            System.out.println("5. Voir l'historique des transactions");
-            System.out.println("6. Se déconnecter");
+            System.out.println("1. Modifier mon profile");
+            System.out.println("2. changer mon mot de pass");
+            System.out.println("3. Consulter mon solde");
+            System.out.println("4. Effectuer un dépôt");
+            System.out.println("5. Effectuer un retrait");
+            System.out.println("6. Effectuer un virement");
+            System.out.println("7. Voir l'historique des transactions");
+            System.out.println("8. Se déconnecter");
             System.out.print("Votre choix : ");
 
             String choice = scanner.nextLine();
 
             switch (choice) {
                 case "1":
+                    showMenuUpdateProfil(scanner,userService,loggedInUser);
+                    break;
                 case "2":
                 case "3":
                 case "4":
@@ -77,11 +80,35 @@ public class Main {
                     System.out.println("Fonctionnalité à venir...");
                     break;
                 case "6":
+                case "7":
+                case "8":
                     System.out.println("Déconnexion réussie.");
                     return;
                 default:
                     System.out.println("Choix invalide. Veuillez réessayer.");
                     break;
+            }
+        }
+    }
+
+    private static void showMenuUpdateProfil(Scanner scanner,UserService userService,User loggedInUser){
+        while(true){
+            System.out.println("\n--- Menu De Modification ---");
+            System.out.println("1. Est-ce-que vous voulez de changer le nom");
+            System.out.println("2. Est-ce-que vous voulez de changer l'email");
+            System.out.println("3. Est-ce-que vous voulez de changer l'adresse");
+
+            String choice = scanner.nextLine();
+
+            switch (choice){
+                case "1":
+                    System.out.println("Entrez votre nouveau nom : ");
+                    String newName = scanner.nextLine();
+                    userService.updateName(loggedInUser,newName);
+                case "2":
+                    System.out.println("Entrez votre nouveau email : ");
+                    String newEmail = scanner.nextLine();
+                    userService.updateEmail(loggedInUser,newEmail);
             }
         }
     }
