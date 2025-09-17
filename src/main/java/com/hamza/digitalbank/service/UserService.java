@@ -80,4 +80,12 @@ public class UserService {
 
         System.out.println("Nom mis à jour avec succès !");
     }
+
+    public void updateEmail(User loggedInUser,String newEmail){
+        loggedInUser.setEmail(newEmail);
+
+        userRepository.save(loggedInUser);
+
+        System.out.println("Email mis à jour avec succès !");
+    }
 }
