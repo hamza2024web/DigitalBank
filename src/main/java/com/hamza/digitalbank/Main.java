@@ -105,14 +105,20 @@ public class Main {
                     System.out.println("Entrez votre nouveau nom : ");
                     String newName = scanner.nextLine();
                     userService.updateName(loggedInUser,newName);
+                    return;
                 case "2":
                     System.out.println("Entrez votre nouveau email : ");
                     String newEmail = scanner.nextLine();
                     userService.updateEmail(loggedInUser,newEmail);
+                    return;
                 case "3":
                     System.out.println("Entrez votre nouveau addresse : ");
                     String newAddresse = scanner.nextLine();
                     userService.updateAddresse(loggedInUser,newAddresse);
+                    return;
+                default:
+                    System.out.println("Choix invalide. Veuillez réessayer.");
+                    break;
             }
         }
     }
