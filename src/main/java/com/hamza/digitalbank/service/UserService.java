@@ -96,4 +96,8 @@ public class UserService {
 
         System.out.println("Adresse mis à jour avec succès !");
     }
+
+    public void UpdatePassword(String ancienPassword,String newPassword,User loggedInUser){
+
+    }
 }

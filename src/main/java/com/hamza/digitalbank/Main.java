@@ -74,6 +74,12 @@ public class Main {
                     showMenuUpdateProfil(scanner,userService,loggedInUser);
                     break;
                 case "2":
+                    System.out.println("Veuillez saiser l'ancien mot de pass");
+                    String ancienPassword = scanner.nextLine();
+                    System.out.println("veuillez saiser le nouveau mot de pass");
+                    String newPassword = scanner.nextLine();
+                    userService.UpdatePassword(ancienPassword,newPassword,loggedInUser);
+                    return;
                 case "3":
                 case "4":
                 case "5":
