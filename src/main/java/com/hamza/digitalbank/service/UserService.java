@@ -88,4 +88,12 @@ public class UserService {
 
         System.out.println("Email mis à jour avec succès !");
     }
+
+    public void updateAddresse(User loggedInUser,String newAddresse){
+        loggedInUser.setAdresse(newAddresse);
+
+        userRepository.save(loggedInUser);
+
+        System.out.println("Adresse mis à jour avec succès !");
+    }
 }

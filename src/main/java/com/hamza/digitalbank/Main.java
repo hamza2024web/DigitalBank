@@ -109,6 +109,10 @@ public class Main {
                     System.out.println("Entrez votre nouveau email : ");
                     String newEmail = scanner.nextLine();
                     userService.updateEmail(loggedInUser,newEmail);
+                case "3":
+                    System.out.println("Entrez votre nouveau addresse : ");
+                    String newAddresse = scanner.nextLine();
+                    userService.updateAddresse(loggedInUser,newAddresse);
             }
         }
     }
