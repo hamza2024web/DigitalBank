@@ -49,4 +49,27 @@ public class UserService {
         System.out.println("\nFélicitations, " + fullName + " ! Votre compte a été créé avec succès.");
         System.out.println("Votre numéro de compte est : " + accountId);
     }
+
+    public Optional<User> login(Scanner scanner){
+        System.out.println("\\n--- Connexion ---");
+
+        System.out.println("Entrez votre addresse email : ");
+        String email = scanner.nextLine();
+
+        System.out.println("Entrez votre mot de passe : ");
+        String password = scanner.nextLine();
+
+        Optional<User> userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isPresent()){
+            User user = userOptional.get();
+            if (user.getPassword().equals(password)){
+                System.out.println("\nConnexion réussie ! Bienvenue, " + user.getFullName() + ".");
+                return userOptional;
+            }
+        }
+
+        System.out.println("Erreur : Email ou mot de passe incorrect.");
+        return Optional.empty();
+    }
 }
