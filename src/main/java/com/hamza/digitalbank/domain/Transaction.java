@@ -12,7 +12,7 @@ public class Transaction {
     private String counterpartyAccountId;
     private String description;
 
-    public Transaction (String accountId,BigDecimal amount,String counterpartyAccountId,String description){
+    public Transaction (String accountId, TransactionType deposit, BigDecimal amount, String counterpartyAccountId, String description){
         this.id = UUID.randomUUID();
         this.timestamp = Instant.now();
         this.accountId = accountId;

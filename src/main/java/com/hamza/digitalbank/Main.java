@@ -71,8 +71,8 @@ public class Main {
 
             switch (choice) {
                 case "1":
-                    String nom = loggedInUser.getFullName();
-                    System.out.println("Nom : " + nom);
+                    String fullName = loggedInUser.getFullName();
+                    System.out.println("Nom : " + fullName);
 
                     String email = loggedInUser.getEmail();
                     System.out.println("Email : " + email);
@@ -113,7 +113,7 @@ public class Main {
             System.out.println("1. Est-ce-que vous voulez de changer le nom");
             System.out.println("2. Est-ce-que vous voulez de changer l'email");
             System.out.println("3. Est-ce-que vous voulez de changer l'adresse");
-
+            System.out.println("4. Exit .");
             String choice = scanner.nextLine();
 
             switch (choice){
@@ -131,6 +131,8 @@ public class Main {
                     System.out.println("Entrez votre nouveau addresse : ");
                     String newAddresse = scanner.nextLine();
                     userService.updateAddresse(loggedInUser,newAddresse);
+                    return;
+                case "4":
                     return;
                 default:
                     System.out.println("Choix invalide. Veuillez réessayer.");
