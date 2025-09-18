@@ -64,6 +64,7 @@ public class Main {
             System.out.println("Aucun compte bancaire n'est associé a cet utilisateur .");
             return;
         }
+
         Account userAccount = userAccountOptional.get();
         while (true) {
             System.out.println("\n--- Menu Utilisateur ---");
