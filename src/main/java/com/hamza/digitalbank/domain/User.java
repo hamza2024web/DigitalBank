@@ -11,6 +11,7 @@ public class User {
 
     public User (String fullname,String email,String adresse,String password){
         this.id = UUID.randomUUID();
+        this.fullname = fullname;
         this.email = email;
         this.adresse = adresse;
         this.password = password;

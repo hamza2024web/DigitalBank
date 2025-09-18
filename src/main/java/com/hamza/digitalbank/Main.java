@@ -116,7 +116,7 @@ public class Main {
                     System.out.println("Compte n° : " + userAccount.getAccountId() + " | Solde : " + userAccount.getBalance() + " €");
                     System.out.print("Veuillez saisir le numéro de compte du destinataire : ");
                     String destinataireId = scanner.nextLine();
-                    accountService.virement(userAccount, destinataireId, scanner);
+                    accountService.transfer(userAccount, destinataireId, scanner);
                     break;
                 case "7":
                 case "8":

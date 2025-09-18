@@ -91,7 +91,7 @@ public class AccountService {
         }
     }
 
-    public void virement(Account userAccount ,String destinataireId,Scanner scanner){
+    public void transfer(Account userAccount ,String destinataireId,Scanner scanner){
         Optional<Account> accountOptional = accountRepository.findById(destinataireId);
 
         try {
@@ -106,12 +106,14 @@ public class AccountService {
                 } else {
                     Account accountDestinataire = accountOptional.get();
 
-                    accountDestinataire.getBalance().add(montant);
+                    accountDestinataire.setBalance(accountDestinataire.getBalance().add(montant));
                     accountRepository.save(accountDestinataire);
 
-                    userAccount.getBalance().subtract(montant);
+                    userAccount.setBalance(userAccount.getBalance().subtract(montant));
                     accountRepository.save(userAccount);
 
+                    Transaction transaction = new Transaction(userAccount.getAccountId(),TransactionType.TRANSFER_OUT,montant,accountDestinataire.getAccountId(),"Faire un virement sur le compte .");
+                    Transaction transaction1 = new Transaction(accountDestinataire.getAccountId(),TransactionType.TRANSFER_IN,montant,userAccount.getAccountId(),"reçue un virement sur le compte .");
                     System.out.println("Virement Effectuer avec succès .");
                     System.out.println("Nouveau solde : " + userAccount.getBalance() + " €");
                 }
