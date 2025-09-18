@@ -43,7 +43,7 @@ public class Main {
 
                     if(loggedInUserOptional.isPresent()){
                         User loggedInUser = loggedInUserOptional.get();
-                        showUserMenu(loggedInUser,scanner,userService,accountService);
+                        showUserMenu(loggedInUser,scanner);
                     }
                     break;
                 case "3":
@@ -91,7 +91,7 @@ public class Main {
                     String adresse = loggedInUser.getAdresse();
                     System.out.println("Adresse : " + adresse);
 
-                    showMenuUpdateProfil(scanner,userService,loggedInUser);
+                    showMenuUpdateProfil(scanner,loggedInUser);
 
                     break;
                 case "2":
@@ -102,13 +102,22 @@ public class Main {
                     userService.UpdatePassword(oldPassword,newPassword,loggedInUser);
                     return;
                 case "3":
+                    System.out.println("Compte n° : " + userAccount.getAccountId() + " | solde : " + userAccount.getBalance() + " €");
+                    break;
                 case "4":
                     System.out.println("compte n° : " + userAccount.getAccountId() + " | solde : " + userAccount.getBalance() + " €");
                     accountService.deposit(userAccount.getAccountId(),scanner);
+                    break;
                 case "5":
-                    System.out.println("Fonctionnalité à venir...");
+                    System.out.println("compte n° : " + userAccount.getAccountId() + " | solde : " + userAccount.getBalance() + " €");
+                    accountService.withdraw(userAccount.getAccountId(),scanner);
                     break;
                 case "6":
+                    System.out.println("Compte n° : " + userAccount.getAccountId() + " | Solde : " + userAccount.getBalance() + " €");
+                    System.out.print("Veuillez saisir le numéro de compte du destinataire : ");
+                    String destinataireId = scanner.nextLine();
+                    accountService.virement(userAccount, destinataireId, scanner);
+                    break;
                 case "7":
                 case "8":
                     System.out.println("Déconnexion réussie.");
@@ -120,7 +129,7 @@ public class Main {
         }
     }
 
-    private static void showMenuUpdateProfil(Scanner scanner, UserService userService, User loggedInUser){
+    private static void showMenuUpdateProfil(Scanner scanner, User loggedInUser){
         while(true){
             System.out.println("\n--- Menu De Modification ---");
             System.out.println("1. Est-ce-que vous voulez de changer le nom");

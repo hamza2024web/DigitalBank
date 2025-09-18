@@ -87,7 +87,37 @@ public class AccountService {
                 System.out.println("Erreur : Compte non trouvé.");
             }
         } catch (NumberFormatException e) {
-            System.out.println("Erreur : Montant invalide. Veuillez entrer un nombre.");
+            System.out.println("Erreur : Montant invalide. Veuillez entrer un nombre .");
+        }
+    }
+
+    public void virement(Account userAccount ,String destinataireId,Scanner scanner){
+        Optional<Account> accountOptional = accountRepository.findById(destinataireId);
+
+        try {
+            if (accountOptional.isPresent()){
+                System.out.println("\n--- Effectuer un virement ---");
+                System.out.println("Entrer le montant qu'est vous voulez de versé : ");
+                BigDecimal montant = new BigDecimal(scanner.nextLine());
+
+                if (userAccount.getBalance().compareTo(montant) < 0){
+                    System.out.println("Solde insuffisant pour effectuer ce virement");
+                    return;
+                } else {
+                    Account accountDestinataire = accountOptional.get();
+
+                    accountDestinataire.getBalance().add(montant);
+                    accountRepository.save(accountDestinataire);
+
+                    userAccount.getBalance().subtract(montant);
+                    accountRepository.save(userAccount);
+
+                    System.out.println("Virement Effectuer avec succès .");
+                    System.out.println("Nouveau solde : " + userAccount.getBalance() + " €");
+                }
+            }
+        } catch (NumberFormatException e){
+            System.out.println("Erreur : Montant invalide. veuillez entrer un nombre .");
         }
     }
 }
