@@ -120,6 +120,8 @@ public class Main {
                     accountService.transfer(userAccount, destinataireId, scanner);
                     break;
                 case "7":
+                    accountService.printTransactionHistory(userAccount.getAccountId());
+
                 case "8":
                     System.out.println("Déconnexion réussie.");
                     return;

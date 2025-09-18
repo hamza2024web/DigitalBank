@@ -7,6 +7,7 @@ import com.hamza.digitalbank.repository.AccountRepository;
 import com.hamza.digitalbank.repository.TransactionRepository;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -120,6 +121,16 @@ public class AccountService {
             }
         } catch (NumberFormatException e){
             System.out.println("Erreur : Montant invalide. veuillez entrer un nombre .");
+        }
+    }
+
+    public void printTransactionHistory(String accountId){
+        System.out.println("\n--- Historique des transactions pour le compte " + accountId + " ---");
+
+        List<Transaction> transactions = transactionRepository.findAllByAccountId(accountId);
+
+        if(transactions.isEmpty()){
+            System.out.println("Aucun transaction à afficher pour ce compte .");
         }
     }
 }
