@@ -2,9 +2,7 @@ package com.hamza.digitalbank.repository;
 
 import com.hamza.digitalbank.domain.Account;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class InMemoryAccountRepository implements AccountRepository{
     private final Map<String,Account> accountStore = new HashMap<>();
@@ -17,5 +15,10 @@ public class InMemoryAccountRepository implements AccountRepository{
     @Override
     public Optional<Account> findById(String accountId) {
         return Optional.ofNullable(accountStore.get(accountId));
+    }
+
+    @Override
+    public List<Account> findAll() {
+        return new ArrayList<>(accountStore.values());
     }
 }

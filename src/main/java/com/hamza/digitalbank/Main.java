@@ -1,19 +1,23 @@
 package com.hamza.digitalbank;
 
+import com.hamza.digitalbank.domain.Account;
 import com.hamza.digitalbank.domain.User;
 import com.hamza.digitalbank.repository.*;
+import com.hamza.digitalbank.service.AccountService;
 import com.hamza.digitalbank.service.UserService;
 
 import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args){
-        UserRepository userRepository = new InMemoryUserRepository();
-        AccountRepository accountRepository = new InMemoryAccountRepository();
-        TransactionRepository transactionRepository = new InMemoryTransactionRepository();
+    private static final UserRepository userRepository = new InMemoryUserRepository();
+    private static final AccountRepository accountRepository = new InMemoryAccountRepository();
+    private static final TransactionRepository transactionRepository = new InMemoryTransactionRepository();
 
-        UserService userService = new UserService(userRepository,accountRepository);
+    private static final UserService userService = new UserService(userRepository,accountRepository);
+    private static final AccountService accountService = new AccountService(accountRepository,transactionRepository);
+
+    public static void main(String[] args){
 
         Scanner scanner = new Scanner(System.in);
 
@@ -39,7 +43,7 @@ public class Main {
 
                     if(loggedInUserOptional.isPresent()){
                         User loggedInUser = loggedInUserOptional.get();
-                        showUserMenu(loggedInUser,scanner,userService);
+                        showUserMenu(loggedInUser,scanner,userService,accountService);
                     }
                     break;
                 case "3":
@@ -53,7 +57,14 @@ public class Main {
         }
     }
 
-    private static void showUserMenu(User loggedInUser, Scanner scanner,UserService userService) {
+    private static void showUserMenu(User loggedInUser, Scanner scanner) {
+        Optional<Account> userAccountOptional = accountRepository.findAll().stream().filter(acc -> acc.getOwnerUserId().equals(loggedInUser.getId())).findFirst();
+
+        if (userAccountOptional.isEmpty()){
+            System.out.println("Aucun compte bancaire n'est associé a cet utilisateur .");
+            return;
+        }
+        Account userAccount = userAccountOptional.get();
         while (true) {
             System.out.println("\n--- Menu Utilisateur ---");
             System.out.println("Connecté en tant que : " + loggedInUser.getFullName());
@@ -92,6 +103,8 @@ public class Main {
                     return;
                 case "3":
                 case "4":
+                    System.out.println("compte n° : " + userAccount.getAccountId() + " | solde : " + userAccount.getBalance() + " €");
+                    accountService.deposit(userAccount.getAccountId(),scanner);
                 case "5":
                     System.out.println("Fonctionnalité à venir...");
                     break;
@@ -107,7 +120,7 @@ public class Main {
         }
     }
 
-    private static void showMenuUpdateProfil(Scanner scanner,UserService userService,User loggedInUser){
+    private static void showMenuUpdateProfil(Scanner scanner, UserService userService, User loggedInUser){
         while(true){
             System.out.println("\n--- Menu De Modification ---");
             System.out.println("1. Est-ce-que vous voulez de changer le nom");
@@ -120,17 +133,17 @@ public class Main {
                 case "1":
                     System.out.println("Entrez votre nouveau nom : ");
                     String newName = scanner.nextLine();
-                    userService.updateName(loggedInUser,newName);
+                    Main.userService.updateName(loggedInUser,newName);
                     return;
                 case "2":
                     System.out.println("Entrez votre nouveau email : ");
                     String newEmail = scanner.nextLine();
-                    userService.updateEmail(loggedInUser,newEmail);
+                    Main.userService.updateEmail(loggedInUser,newEmail);
                     return;
                 case "3":
                     System.out.println("Entrez votre nouveau addresse : ");
                     String newAddresse = scanner.nextLine();
-                    userService.updateAddresse(loggedInUser,newAddresse);
+                    Main.userService.updateAddresse(loggedInUser,newAddresse);
                     return;
                 case "4":
                     return;
