@@ -57,7 +57,7 @@ public class Main {
         while (true) {
             System.out.println("\n--- Menu Utilisateur ---");
             System.out.println("Connecté en tant que : " + loggedInUser.getFullName());
-            System.out.println("1. Modifier mon profile");
+            System.out.println("1. Voir mon profile");
             System.out.println("2. changer mon mot de pass");
             System.out.println("3. Consulter mon solde");
             System.out.println("4. Effectuer un dépôt");
@@ -71,7 +71,17 @@ public class Main {
 
             switch (choice) {
                 case "1":
+                    String nom = loggedInUser.getFullName();
+                    System.out.println("Nom : " + nom);
+
+                    String email = loggedInUser.getEmail();
+                    System.out.println("Email : " + email);
+
+                    String adresse = loggedInUser.getAdresse();
+                    System.out.println("Adresse : " + adresse);
+
                     showMenuUpdateProfil(scanner,userService,loggedInUser);
+
                     break;
                 case "2":
                     System.out.println("Veuillez saiser l'ancien mot de pass");
