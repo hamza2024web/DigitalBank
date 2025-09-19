@@ -3,6 +3,7 @@ package com.hamza.digitalbank.repository;
 import com.hamza.digitalbank.domain.Account;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryAccountRepository implements AccountRepository{
     private final Map<String,Account> accountStore = new HashMap<>();
@@ -20,5 +21,9 @@ public class InMemoryAccountRepository implements AccountRepository{
     @Override
     public List<Account> findAll() {
         return new ArrayList<>(accountStore.values());
+    }
+
+    public List<Account> findAllByOwnerUserId(String ownerUserId) {
+        return accountStore.values().stream().filter(account -> account.getOwnerUserId().equals(ownerUserId)).collect(Collectors.toList());
     }
 }

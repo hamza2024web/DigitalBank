@@ -50,6 +50,14 @@ public class UserService {
         System.out.println("Votre numéro de compte est : " + accountId);
     }
 
+    public void createNewAccountForUser(User user){
+        Account newAccount = new Account(user.getId());
+        accountRepository.save(newAccount);
+
+        System.out.println("\nNouveau compte bancaire crée avec succès !");
+        System.out.println("Numéro du nouveau compte : " + newAccount.getAccountId());
+    }
+
     public Optional<User> login(Scanner scanner){
         System.out.println("\\n--- Connexion ---");
 

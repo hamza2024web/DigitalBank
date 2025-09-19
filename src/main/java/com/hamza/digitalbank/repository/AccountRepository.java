@@ -9,4 +9,5 @@ public interface AccountRepository {
     void save(Account account);
     Optional<Account>findById(String accountId);
     List<Account> findAll();
+    List<Account> findAllByOwnerUserId(String ownerUserId);
 }

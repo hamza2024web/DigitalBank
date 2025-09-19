@@ -76,7 +76,8 @@ public class Main {
             System.out.println("5. Effectuer un retrait");
             System.out.println("6. Effectuer un virement");
             System.out.println("7. Voir l'historique des transactions");
-            System.out.println("8. Se déconnecter");
+            System.out.println("8. Crée un autre Account");
+            System.out.println("9. Se déconnecter");
             System.out.print("Votre choix : ");
 
             String choice = scanner.nextLine();
@@ -123,6 +124,8 @@ public class Main {
                     accountService.printTransactionHistory(userAccount.getAccountId());
                     break;
                 case "8":
+
+                case "9":
                     System.out.println("Déconnexion réussie.");
                     return;
                 default:
