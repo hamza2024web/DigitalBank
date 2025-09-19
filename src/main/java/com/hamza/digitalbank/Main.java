@@ -42,11 +42,27 @@ public class Main {
                 case "2" :
                     Optional<User> loggedInUserOptional = userService.login(scanner);
 
-                    if(loggedInUserOptional.isPresent()){
+                    if (loggedInUserOptional.isPresent()) {
                         User loggedInUser = loggedInUserOptional.get();
-                        showUserMenu(loggedInUser,scanner);
+
+                        List<Account> userAccounts = accountRepository.findAllByOwnerUserId(loggedInUser.getId());
+
+                        if (userAccounts.isEmpty()) {
+                            System.out.println("Vous n'avez aucun compte bancaire.");
+                            break;
+                        }
+
+                        boolean hasActiveAccount = userAccounts.stream().anyMatch(Account::isActive);
+
+                        if (!hasActiveAccount) {
+                            System.out.println("Tous vos comptes sont désactivés. Vous ne pouvez pas vous connecter.");
+                            break;
+                        }
+
+                        showUserMenu(loggedInUser, scanner);
                     }
                     break;
+
                 case "3":
                     System.out.println("Merci d'avoir utilisé nos services. À bientôt !");
                     scanner.close();
@@ -102,7 +118,8 @@ public class Main {
                     System.out.println("Veuillez entrer le numéro de compte bancaire :");
                     String numberAccount = scanner.nextLine();
                     accountService.blockAccount(loggedInUser,numberAccount);
-                    break;
+                    System.out.println("Merci d'avoir utilisé nos services. À bientôt !");
+                    return;
                 case "5":
                     System.out.println("Déconnexion réussie. ");
                     return;
