@@ -51,7 +51,8 @@ public class UserService {
     }
 
     public void createNewAccountForUser(User user){
-        Account newAccount = new Account(user.getId());
+        String accountId = "FR" + (1000 + new Random().nextInt(900000));
+        Account newAccount = new Account(accountId,user.getId());
         accountRepository.save(newAccount);
 
         System.out.println("\nNouveau compte bancaire crée avec succès !");
@@ -114,6 +115,5 @@ public class UserService {
             System.out.println("veuillez saiser un mot de passe correct (ancien mot de passe valide et nouveau mot de passe >= 6");
         }
     }
-
 
 }

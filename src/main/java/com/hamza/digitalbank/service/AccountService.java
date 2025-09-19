@@ -3,6 +3,7 @@ package com.hamza.digitalbank.service;
 import com.hamza.digitalbank.domain.Account;
 import com.hamza.digitalbank.domain.Transaction;
 import com.hamza.digitalbank.domain.TransactionType;
+import com.hamza.digitalbank.domain.User;
 import com.hamza.digitalbank.repository.AccountRepository;
 import com.hamza.digitalbank.repository.TransactionRepository;
 
@@ -147,4 +148,23 @@ public class AccountService {
         });
         System.out.println("--------------------------------------------------");
     }
+
+    public void listAccounts(User loggedInUser) {
+        List<Account> userAccounts = accountRepository.findAllByOwnerUserId(loggedInUser.getId());
+
+        if (userAccounts.isEmpty()) {
+            System.out.println("Vous n'avez aucun compte bancaire.");
+            return;
+        }
+
+        userAccounts.stream().sorted(Comparator.comparing(Account::getInstant).reversed()).forEach(acc -> {
+                    System.out.println("-------------------------------------------------");
+                    System.out.println("Compte n° : " + acc.getAccountId());
+                    System.out.println("Solde : " + acc.getBalance() + " €");
+                    System.out.println("Date de création : " + acc.getInstant());
+                    System.out.println("Actif : " + acc.isActive());
+        });
+        System.out.println("-------------------------------------------------");
+    }
+
 }

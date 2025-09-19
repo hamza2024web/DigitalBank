@@ -6,6 +6,7 @@ import com.hamza.digitalbank.repository.*;
 import com.hamza.digitalbank.service.AccountService;
 import com.hamza.digitalbank.service.UserService;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -57,82 +58,132 @@ public class Main {
         }
     }
 
-    private static void showUserMenu(User loggedInUser, Scanner scanner) {
-        Optional<Account> userAccountOptional = accountRepository.findAll().stream().filter(acc -> acc.getOwnerUserId().equals(loggedInUser.getId())).findFirst();
+    private static void showUserMenu(User loggedInUser, Scanner scanner){
+        while(true ){
+            System.out.println("\n--- Menu Utilisateur : " + loggedInUser.getFullName() + " ---");
 
-        if (userAccountOptional.isEmpty()){
-            System.out.println("Aucun compte bancaire n'est associé a cet utilisateur .");
-            return;
-        }
+            List<Account> userAccounts = accountRepository.findAllByOwnerUserId(loggedInUser.getId());
 
-        Account userAccount = userAccountOptional.get();
-        while (true) {
-            System.out.println("\n--- Menu Utilisateur ---");
-            System.out.println("Connecté en tant que : " + loggedInUser.getFullName());
-            System.out.println("1. Voir mon profile");
-            System.out.println("2. changer mon mot de pass");
-            System.out.println("3. Consulter mon solde");
-            System.out.println("4. Effectuer un dépôt");
-            System.out.println("5. Effectuer un retrait");
-            System.out.println("6. Effectuer un virement");
-            System.out.println("7. Voir l'historique des transactions");
-            System.out.println("8. Crée un autre Account");
-            System.out.println("9. Se déconnecter");
+            System.out.println("Vos Compte Bancaire :");
+            if (userAccounts.isEmpty()){
+                System.out.println("Vous n'avez actuellement aucun compte bancaire.");
+            } else {
+                for (int i = 0 ; i < userAccounts.size() ; i++){
+                    Account acc = userAccounts.get(i);
+                    System.out.printf("%d. compte n° %s | Solde : %s €\n", i+1 , acc.getAccountId(), acc.getBalance());
+                }
+            }
+
+            System.out.println("--------------------------------------------------");
+            System.out.println("1. Gérer un compte (Dépôt, Retrait, Virement...)");
+            System.out.println("2. Créer un nouveau compte bancaire");
+            System.out.println("3. lister mes compte bancaire");
+            System.out.println("4. Se déconnecter");
             System.out.print("Votre choix : ");
 
-            String choice = scanner.nextLine();
+            String choice = scanner.nextLine().toUpperCase();
 
             switch (choice) {
                 case "1":
-                    String fullName = loggedInUser.getFullName();
-                    System.out.println("Nom : " + fullName);
-
-                    String email = loggedInUser.getEmail();
-                    System.out.println("Email : " + email);
-
-                    String adresse = loggedInUser.getAdresse();
-                    System.out.println("Adresse : " + adresse);
-
-                    showMenuUpdateProfil(scanner,loggedInUser);
-
+                    if (userAccounts.isEmpty()){
+                        System.out.println("Vous devez d'abord crée un compte .");
+                        break;
+                    }
+                    manageAccount(loggedInUser, (List<Account>) userAccounts, scanner);
                     break;
                 case "2":
-                    System.out.println("Veuillez saiser l'ancien mot de pass");
-                    String oldPassword = scanner.nextLine();
-                    System.out.println("veuillez saiser le nouveau mot de pass");
-                    String newPassword = scanner.nextLine();
-                    userService.UpdatePassword(oldPassword,newPassword,loggedInUser);
-                    return;
+                    userService.createNewAccountForUser(loggedInUser);
+                    break;
                 case "3":
-                    System.out.println("Compte n° : " + userAccount.getAccountId() + " | solde : " + userAccount.getBalance() + " €");
+                    accountService.listAccounts(loggedInUser);
                     break;
                 case "4":
-                    System.out.println("compte n° : " + userAccount.getAccountId() + " | solde : " + userAccount.getBalance() + " €");
-                    accountService.deposit(userAccount.getAccountId(),scanner);
-                    break;
-                case "5":
-                    System.out.println("compte n° : " + userAccount.getAccountId() + " | solde : " + userAccount.getBalance() + " €");
-                    accountService.withdraw(userAccount.getAccountId(),scanner);
-                    break;
-                case "6":
-                    System.out.println("Compte n° : " + userAccount.getAccountId() + " | Solde : " + userAccount.getBalance() + " €");
-                    System.out.print("Veuillez saisir le numéro de compte du destinataire : ");
-                    String destinataireId = scanner.nextLine();
-                    accountService.transfer(userAccount, destinataireId, scanner);
-                    break;
-                case "7":
-                    accountService.printTransactionHistory(userAccount.getAccountId());
-                    break;
-                case "8":
-
-                case "9":
-                    System.out.println("Déconnexion réussie.");
+                    System.out.println("Déconnexion réussie. ");
                     return;
                 default:
-                    System.out.println("Choix invalide. Veuillez réessayer.");
-                    break;
+                    System.out.println("Choix Invalide. veuillez réessayer.");
             }
         }
+    }
+
+    private static void manageAccount(User loggedInUser,List<Account> accounts ,Scanner scanner) {
+        System.out.println("Entrez le numéro de compte à gérer ");
+        try {
+            int accountIndex = Integer.parseInt(scanner.nextLine()) - 1;
+            if (accountIndex < 0 || accountIndex >= accounts.size()){
+                System.out.println("Numéro de compte invalide. ");
+                return;
+            }
+            Account selectedAccount = accounts.get(accountIndex);
+
+            while (true) {
+                selectedAccount = accountRepository.findById(selectedAccount.getAccountId()).get();
+                System.out.println("\n--- Menu Utilisateur ---");
+                System.out.println("Connecté en tant que : " + loggedInUser.getFullName());
+                System.out.println("1. Voir mon profile");
+                System.out.println("2. changer mon mot de pass");
+                System.out.println("3. Consulter mon solde");
+                System.out.println("4. Effectuer un dépôt");
+                System.out.println("5. Effectuer un retrait");
+                System.out.println("6. Effectuer un virement");
+                System.out.println("7. Voir l'historique des transactions");
+                System.out.println("8. Revenir au menu précédent");
+                System.out.print("Votre choix : ");
+
+                String choice = scanner.nextLine();
+
+                switch (choice) {
+                    case "1":
+                        String fullName = loggedInUser.getFullName();
+                        System.out.println("Nom : " + fullName);
+
+                        String email = loggedInUser.getEmail();
+                        System.out.println("Email : " + email);
+
+                        String adresse = loggedInUser.getAdresse();
+                        System.out.println("Adresse : " + adresse);
+
+                        showMenuUpdateProfil(scanner,loggedInUser);
+
+                        break;
+                    case "2":
+                        System.out.println("Veuillez saiser l'ancien mot de pass");
+                        String oldPassword = scanner.nextLine();
+                        System.out.println("veuillez saiser le nouveau mot de pass");
+                        String newPassword = scanner.nextLine();
+                        userService.UpdatePassword(oldPassword,newPassword,loggedInUser);
+                        break;
+                    case "3":
+                        System.out.println("Compte n° : " + selectedAccount.getAccountId() + " | solde : " + selectedAccount.getBalance() + " €");
+                        break;
+                    case "4":
+                        System.out.println("compte n° : " + selectedAccount.getAccountId() + " | solde : " + selectedAccount.getBalance() + " €");
+                        accountService.deposit(selectedAccount.getAccountId(),scanner);
+                        break;
+                    case "5":
+                        System.out.println("compte n° : " + selectedAccount.getAccountId() + " | solde : " + selectedAccount.getBalance() + " €");
+                        accountService.withdraw(selectedAccount.getAccountId(),scanner);
+                        break;
+                    case "6":
+                        System.out.println("Compte n° : " + selectedAccount.getAccountId() + " | Solde : " + selectedAccount.getBalance() + " €");
+                        System.out.print("Veuillez saisir le numéro de compte du destinataire : ");
+                        String destinataireId = scanner.nextLine();
+                        accountService.transfer(selectedAccount, destinataireId, scanner);
+                        break;
+                    case "7":
+                        accountService.printTransactionHistory(selectedAccount.getAccountId());
+                        break;
+                    case "8":
+                        return;
+                    default:
+                        System.out.println("Choix invalide. Veuillez réessayer.");
+                        break;
+                }
+            }
+        } catch (NumberFormatException e){
+            System.out.println("Entrée invalide. Veuillez entrer un nombre. ");
+        }
+
     }
 
     private static void showMenuUpdateProfil(Scanner scanner, User loggedInUser){

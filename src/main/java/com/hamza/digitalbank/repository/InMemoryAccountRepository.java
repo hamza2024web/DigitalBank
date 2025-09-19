@@ -23,7 +23,9 @@ public class InMemoryAccountRepository implements AccountRepository{
         return new ArrayList<>(accountStore.values());
     }
 
-    public List<Account> findAllByOwnerUserId(String ownerUserId) {
+    @Override
+    public List<Account> findAllByOwnerUserId(UUID ownerUserId) {
         return accountStore.values().stream().filter(account -> account.getOwnerUserId().equals(ownerUserId)).collect(Collectors.toList());
     }
+
 }
