@@ -75,10 +75,11 @@ public class Main {
             }
 
             System.out.println("--------------------------------------------------");
-            System.out.println("1. Gérer un compte (Dépôt, Retrait, Virement...)");
-            System.out.println("2. Créer un nouveau compte bancaire");
-            System.out.println("3. lister mes compte bancaire");
-            System.out.println("4. Se déconnecter");
+            System.out.println("1. Gérer un compte (Dépôt, Retrait, Virement...) .");
+            System.out.println("2. Créer un nouveau compte bancaire .");
+            System.out.println("3. lister mes compte bancaire .");
+            System.out.println("4. Blocker un compte bancaire .");
+            System.out.println("5. Se déconnecter");
             System.out.print("Votre choix : ");
 
             String choice = scanner.nextLine().toUpperCase();
@@ -98,6 +99,11 @@ public class Main {
                     accountService.listAccounts(loggedInUser);
                     break;
                 case "4":
+                    System.out.println("Veuillez entrer le numéro de compte bancaire :");
+                    String numberAccount = scanner.nextLine();
+                    accountService.blockAccount(loggedInUser,numberAccount);
+                    break;
+                case "5":
                     System.out.println("Déconnexion réussie. ");
                     return;
                 default:

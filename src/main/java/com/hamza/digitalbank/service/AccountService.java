@@ -167,4 +167,25 @@ public class AccountService {
         System.out.println("-------------------------------------------------");
     }
 
+    public void blockAccount(User loggedInUser, String numberAccount){
+        Optional<Account> userAccountOptional = accountRepository.findById(numberAccount);
+
+        if (userAccountOptional.isEmpty()){
+            System.out.println("Compte introuvable");
+            return;
+        }
+
+        Account userAccount = userAccountOptional.get();
+
+        if (!userAccount.getOwnerUserId().equals(loggedInUser.getId())){
+            System.out.println("Vous n'étes pas autorisé à bloquer ce compte .");
+            return;
+        }
+
+        userAccount.setActive(false);
+        accountRepository.save(userAccount);
+
+        System.out.println("Votre compte a été désactivé .");
+    }
+
 }
