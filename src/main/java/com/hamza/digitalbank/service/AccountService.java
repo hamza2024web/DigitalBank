@@ -7,6 +7,8 @@ import com.hamza.digitalbank.repository.AccountRepository;
 import com.hamza.digitalbank.repository.TransactionRepository;
 
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -132,5 +134,17 @@ public class AccountService {
         if(transactions.isEmpty()){
             System.out.println("Aucun transaction à afficher pour ce compte .");
         }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
+        transactions.stream().sorted(Comparator.comparing(Transaction::getTimestamp).reversed()).forEach(tx -> {
+            String sign = (tx.getType() == TransactionType.DEPOSIT || tx.getType() == TransactionType.TRANSFER_IN) ? "+" : "-";
+            System.out.println("--------------------------------------------------");
+            System.out.printf("Date       : %s\n", tx.getTimestamp().atZone(java.time.ZoneId.systemDefault()).format(formatter));
+            System.out.printf("Type       : %s\n", tx.getType());
+            System.out.printf("Montant    : %s%s €\n", sign, tx.getAmount());
+            System.out.printf("Description: %s\n", tx.getDescription());
+        });
+        System.out.println("--------------------------------------------------");
     }
 }

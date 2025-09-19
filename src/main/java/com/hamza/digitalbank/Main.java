@@ -121,7 +121,7 @@ public class Main {
                     break;
                 case "7":
                     accountService.printTransactionHistory(userAccount.getAccountId());
-
+                    break;
                 case "8":
                     System.out.println("Déconnexion réussie.");
                     return;
